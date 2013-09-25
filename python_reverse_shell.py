@@ -60,7 +60,9 @@ def wait_for_command(s):
                 continue
             fdata = file.read(f)
             f.close()
+            s.send("BEGIN: " + data_arr[i] + "\n")
             s.send(base64.encodestring(fdata))
+            s.send("END: " + data_arr[i] + "\n")
     else:
         # do shell command
         proc = subprocess.Popen(data, shell=True,
