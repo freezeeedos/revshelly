@@ -43,7 +43,7 @@ def connect((host, port)):
 
 def wait_for_command(s):
     data = s.recv(1024)
-    data_arr = shlex.split(data)
+    data_arr = shlex.split(data, posix=False)
     if data == "quit\n":
         s.close()
         sys.exit(0)
