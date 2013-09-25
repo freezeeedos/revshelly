@@ -28,7 +28,6 @@ import socket
 import subprocess
 import sys
 import time
-import uu
 import shlex
 import base64
 
@@ -59,7 +58,6 @@ def wait_for_command(s):
             except IOError, e:
                 s.send("=> " + str(e) + "\n")
                 continue
-            #uu.encode(f, s, data_arr[i])
             fdata = file.read(f)
             f.close()
             s.send(base64.encodestring(fdata))
