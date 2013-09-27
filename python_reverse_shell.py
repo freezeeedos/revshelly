@@ -49,7 +49,6 @@ def wait_for_command(s):
     data_arr = shlex.split(data, posix=False)
     if data == "quit\n":
         s.close()
-        sys.exit(0)
     # the socket died
     elif len(data)==0:
         return True
