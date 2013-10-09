@@ -25,7 +25,8 @@ no warnings "uninitialized";
 
 use MIME::Base64;
 
-open(my $f, "<", "$ARGV[0]");
+open(my $f, "<", "$ARGV[0]")
+or die qq{Could not open $ARGV[0]: $!};
 
 my @f = <$f>;
 my @files;
