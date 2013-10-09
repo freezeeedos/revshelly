@@ -27,7 +27,7 @@ use MIME::Base64;
 
 open(my $f, "<", "$ARGV[0]");
 
-our @f = <$f>;
+my @f = <$f>;
 my @files;
 sub extract;
 
